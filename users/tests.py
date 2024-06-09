@@ -17,7 +17,6 @@ class UserTest(TransactionTestCase):
         #  Создайте разрешения и группы здесь
         content_type = ContentType.objects.get_for_model(User)
         Permission.objects.create(
-            name='Can add user',
             codename='add_user',
             content_type=content_type
         )
@@ -166,9 +165,9 @@ class UserCreateSerializerTest(TestCase):
     """
 
     def setUp(self):
-        # Создание тестового пользователя
+        # Создание тестового пользователя с уникальным email
         self.user = User.objects.create(
-            email='test@test.ru',
+            email='unique_test@test.ru',
             password='test',
         )
 
@@ -178,4 +177,47 @@ class UserCreateSerializerTest(TestCase):
     def test_contains_expected_fields(self):
         # Проверка, содержит ли сериализатор ожидаемые поля
         data = self.serializer.data
-        self.assertEqual(set(data.keys()), set(['email', 'password', 'first_name', 'last_name']))
+        self.assertEqual(set(data.keys()), set(['email', 'first_name', 'last_name']))
+
+    def test_serialize_user_create(self):
+        # Проверка сериализации при создании пользователя
+        data = {
+            'email': 'unique_test_create@test.ru',
+            'first_name': 'Test',
+            'last_name': 'Testov',
+            'password': 'test'
+        }
+        serializer = UserCreateSerializer(data=data)
+        if not serializer.is_valid():
+            print(serializer.errors)
+        self.assertTrue(serializer.is_valid())
+        self.assertNotIn('password', serializer.data)
+
+    def test_validate_create_user_with_groups(self):
+        # Проверка валидации при добавлении групп
+        group = Group.objects.create(name='TestGroup')
+        data = {
+            'email': 'unique_test_group@example.com',
+            'first_name': 'New',
+            'last_name': 'User',
+            'password': 'newpassword',
+            'groups': [group.pk]
+        }
+        serializer = UserCreateSerializer(data=data)
+        self.assertTrue(serializer.is_valid())
+
+    def test_validate_create_user_with_permissions(self):
+        # Проверка валидации при добавлении разрешений
+        permission = Permission.objects.create(
+            content_type=ContentType.objects.get_for_model(User)
+        )
+
+        data = {
+            'email': 'unique_test_permission@example.com',
+            'first_name': 'New',
+            'last_name': 'User',
+            'password': 'newpassword',
+            'permissions': [permission.pk]
+        }
+        serializer = UserCreateSerializer(data=data)
+        self.assertTrue(serializer.is_valid())

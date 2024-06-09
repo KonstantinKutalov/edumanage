@@ -17,12 +17,18 @@ class UserCreateSerializer(serializers.ModelSerializer):
     """
     Сериализатор для создания нового пользователя.
     """
-    def create(self, validated_data):
-        # Создание нового пользователя
-        instance = User.objects.create_user(**validated_data)
-        return instance
 
     class Meta:
         model = User
         # Поля, используемые при создании пользователя
         fields = ('email', 'password', 'first_name', 'last_name')
+        # При сериализации объекта, поле пароля будет учитываться только при создании или обновлении
+        # объекта, но не будет включено в представление объекта при его получении.
+        extra_kwargs = {'password': {'write_only': True}}
+
+    def create(self, validated_data):
+        password = validated_data.pop('password')
+        instance = User.objects.create(**validated_data)
+        instance.set_password(password)
+        instance.save()
+        return instance
