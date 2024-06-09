@@ -49,6 +49,7 @@ INSTALLED_APPS = [
 
     'config.celery',
     'django_celery_beat',
+    'drf_yasg',
 ]
 
 MIDDLEWARE = [
@@ -146,7 +147,6 @@ REST_FRAMEWORK = {
     ]
 
 }
-
 
 # Celery settings
 CELERY_BROKER_URL = f"redis://:{os.getenv('REDIS_PASSWORD')}@{os.getenv('REDIS_HOST')}:{os.getenv('REDIS_PORT')}/{os.getenv('REDIS_DB')}"
