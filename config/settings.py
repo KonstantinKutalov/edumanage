@@ -46,6 +46,9 @@ INSTALLED_APPS = [
     'modules',
     'rest_framework.authtoken',
     'users',
+
+    'config.celery',
+    'django_celery_beat',
 ]
 
 MIDDLEWARE = [
@@ -124,6 +127,7 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATIC_URL = 'static/'
 
 # Default primary key field type
@@ -142,3 +146,11 @@ REST_FRAMEWORK = {
     ]
 
 }
+
+
+# Celery settings
+CELERY_BROKER_URL = f"redis://:{os.getenv('REDIS_PASSWORD')}@{os.getenv('REDIS_HOST')}:{os.getenv('REDIS_PORT')}/{os.getenv('REDIS_DB')}"
+CELERY_RESULT_BACKEND = 'CELERY_RESULT_BACKEND'
+CELERY_ACCEPT_CONTENT = ['application/json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'
