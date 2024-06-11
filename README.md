@@ -5,33 +5,33 @@
 Проект "edumanage" представляет собой веб-приложение, которое позволяет пользователям создавать, просматривать, редактировать и удалять модули. Каждый модуль имеет уникальный порядковый номер, название, описание и принадлежит определенному пользователю.
 
 ## 2. Структура проекта
-edumanage
-├── config
-│   ├── __init__.py
-│   ├── asgi.py
-│   ├── celery.py
-│   ├── settings.py
-│   ├── urls.py
-│   └── wsgi.py
-├── modules
-│   ├── __init__.py
-│   ├── admin.py
-│   ├── apps.py
-│   ├── models.py
-│   ├── pagination.py
-│   ├── serializers.py
-│   ├── tests.py
-│   ├── urls.py
-│   └── views.py
-└── users
-    ├── __init__.py
-    ├── admin.py
-    ├── apps.py
-    ├── models.py
-    ├── serializers.py
-    ├── tests.py
-    ├── urls.py
-    └── views.py
+edumanage:
+config:
+__init__.py
+asgi.py
+celery.py
+settings.py
+urls.py
+wsgi.py
+modules:
+__init__.py
+admin.py
+apps.py
+models.py
+pagination.py
+serializers.py
+tests.py
+urls.py
+views.py
+users:
+__init__.py
+admin.py
+apps.py
+models.py
+serializers.py
+tests.py
+urls.py
+views.py
 ## 3. Модели
 
 ### 3.1. Модуль (modules.models.Module)
